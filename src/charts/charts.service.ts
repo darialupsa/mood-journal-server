@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MoreThanOrEqual, Repository } from 'typeorm';
+import { And, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { MoodsActivitiesService } from '../moods-activities/moods-activities.service';
 import { Mood } from '../moods/mood.entity';
 import * as moment from 'moment';
@@ -17,17 +17,27 @@ export class ChartsService {
     private emotionRepository: Repository<Emotion>,
   ) {}
 
-  async activitiesPerDay(userId: number): Promise<any[]> {
+  async activitiesPerDay(
+    userId: number,
+    startDate?: string,
+    endDate?: string,
+  ): Promise<any[]> {
     if (!userId) {
       return [];
     }
 
-    const oneMonthsAgo = moment().subtract(1, 'months');
+    startDate =
+      startDate ||
+      moment()
+        .subtract(1, 'months')
+        .startOf('day')
+        .format('yyyy-MM-DD HH:mm:ss');
+    endDate = endDate || moment().endOf('day').format('yyyy-MM-DD HH:mm:ss');
 
     const userMoods = await this.moodRepository.find({
       where: {
         userId,
-        date: MoreThanOrEqual(oneMonthsAgo.format('yyyy-MM-DD 00:00:00')),
+        date: And(MoreThanOrEqual(startDate), LessThanOrEqual(endDate)),
       },
       order: { date: 'ASC' },
     });
@@ -53,17 +63,27 @@ export class ChartsService {
     return activitiesByDay;
   }
 
-  async emotionEvolution(userId: number): Promise<any[]> {
+  async emotionEvolution(
+    userId: number,
+    startDate?: string,
+    endDate?: string,
+  ): Promise<any[]> {
     if (!userId) {
       return [];
     }
 
-    const oneMonthsAgo = moment().subtract(1, 'months');
+    startDate =
+      startDate ||
+      moment()
+        .subtract(1, 'months')
+        .startOf('day')
+        .format('yyyy-MM-DD HH:mm:ss');
+    endDate = endDate || moment().endOf('day').format('yyyy-MM-DD HH:mm:ss');
 
     const userMoods = await this.moodRepository.find({
       where: {
         userId,
-        date: MoreThanOrEqual(oneMonthsAgo.format('yyyy-MM-DD 00:00:00')),
+        date: And(MoreThanOrEqual(startDate), LessThanOrEqual(endDate)),
       },
       order: { date: 'ASC' },
     });

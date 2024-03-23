@@ -6,13 +6,21 @@ export class ChartsController {
   constructor(private chartsService: ChartsService) {}
 
   @Get('activitiesPerDay/:id')
-  activitiesByDate(@Param('id') id?: string): Promise<any[]> {
-    return this.chartsService.activitiesPerDay(+id);
+  activitiesByDate(
+    @Param('id') id?: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+  ): Promise<any[]> {
+    return this.chartsService.activitiesPerDay(+id, startDate, endDate);
   }
 
   @Get('emotionEvolution/:id')
-  emotionEvolution(@Param('id') id?: string): Promise<any[]> {
-    return this.chartsService.emotionEvolution(+id);
+  emotionEvolution(
+    @Param('id') id?: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+  ): Promise<any[]> {
+    return this.chartsService.emotionEvolution(+id, startDate, endDate);
   }
 
   @Get('yearInPixels/:id')
