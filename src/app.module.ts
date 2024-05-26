@@ -12,23 +12,13 @@ import { ChartsModule } from './charts/charts.module';
 
 
 @Module({
-  imports: [
-    // TypeOrmModule.forRoot({
-    //   type: 'mysql',
-    //   host: 'localhost',
-    //   port: 3306,
-    //   username: 'root',
-    //   password: 'l3tSm@ke1tB3tter',
-    //   database: 'mood_journal',
-    //   entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    //   synchronize: false,
-    // }),  
+  imports: [  
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'aws-0-eu-central-1.pooler.supabase.com',
       port: 5432,
-      username: 'postgres.fetcuvlakuewuhlclhtc',
-      password: '6BLwsGrHIKCjOBpc',
+      username: 'postgres.qbfkksrwsjnxbhpdgbcu',
+      password: '1mRId2E7sYLzgBoA',
       database: 'postgres',      
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
      synchronize: false
