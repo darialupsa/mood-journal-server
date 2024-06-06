@@ -207,4 +207,59 @@ export class ChartsService {
 
     return Math.round(sum / moods.length);
   }
+
+  async getUserMoodSuggestedActivity(userId: number): Promise<number[]> {
+    const userMoods = await this.moodRepository.find({
+      where: {
+        userId,
+      },
+      order: { date: 'ASC' },
+    });
+
+    const emotions = await this.emotionRepository.find();
+    const emotionScore = emotions.reduce((obj, emotion) => {
+      obj[emotion.id] = emotion.score;
+      return obj;
+    }, {});
+
+    const moods = userMoods.map((mood) => ({
+      ...mood,
+      score: emotionScore[mood.emotionId],
+    }));
+
+    // Identificarea mood-urilor speciale
+    const specialActivities: { [id: number]: number } = {};
+    for (let i = 0; i < moods.length - 6; i++) {
+      const chain = moods.slice(i, i + 5); // 4 mood-uri rele și 1 bun
+      const followUps = moods.slice(i + 5, i + 7); // cel puțin alte 2 mood-uri bune
+
+      if (
+        chain[0].score <= 3 &&
+        chain[1].score <= 3 &&
+        chain[2].score <= 3 &&
+        chain[3].score <= 3 &&
+        chain[4].score >= 4 &&
+        followUps[0].score >= 4 &&
+        followUps[1].score >= 4
+      ) {
+        const specialMood = chain[4];
+        // incarca activitatile mood-ului zen
+        const activities = await this.moodsActivitiesService.findAllByMoodId(
+          specialMood.id,
+        );
+
+        activities.forEach((a) => {
+          specialActivities[a.activityId] =
+            (specialActivities[a.activityId] || 0) + 1;
+        });
+      }
+    }
+    // Găsește activitățile cu count maxim
+    const maxCount = Math.max(...Object.values(specialActivities));
+    const mostFrequentActivities = Object.keys(specialActivities)
+      .filter((activityId) => specialActivities[activityId] === maxCount)
+      .map((activityId) => parseInt(activityId, 10)); // Convertește string-urile în numere
+
+    return mostFrequentActivities;
+  }
 }

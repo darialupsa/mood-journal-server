@@ -44,4 +44,9 @@ export class ChartsController {
   dateRange(@Param('id') id?: string): Promise<any> {
     return this.chartsService.getUserMoodDateRange(+id);
   }
+
+  @Get('suggestedActivity/:id')
+  suggestedActivity(@Param('id') id?: string): Promise<any[]> {
+    return this.chartsService.getUserMoodSuggestedActivity(+id);
+  }
 }
