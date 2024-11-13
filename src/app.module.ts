@@ -8,7 +8,6 @@ import { UsersModule } from './users/users.module';
 import { ActivitiesModule } from './activities/activities.module';
 import { MoodsModule } from './moods/moods.module';
 import { ChartsModule } from './charts/charts.module';
-import { JobController } from './job.controller';
 
 
 
@@ -31,7 +30,7 @@ import { JobController } from './job.controller';
     MoodsModule, 
     ChartsModule
   ],
-  controllers: [AppController,JobController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
