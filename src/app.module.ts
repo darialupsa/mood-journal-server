@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { ActivitiesModule } from './activities/activities.module';
 import { MoodsModule } from './moods/moods.module';
 import { ChartsModule } from './charts/charts.module';
+import { JobController } from './job.controller';
 
 
 
@@ -16,20 +17,21 @@ import { ChartsModule } from './charts/charts.module';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'aws-0-eu-central-1.pooler.supabase.com',
-      port: 5432,
-      username: 'postgres.qbfkksrwsjnxbhpdgbcu',
-      password: '1mRId2E7sYLzgBoA',
+      port: 6543,
+      username: 'postgres.scgskztvwmhpptkzoxlm',
+      password: 'YMAXdGNrhFkNPgcW',
       database: 'postgres',      
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
      synchronize: false
     }),   
+
     UsersModule,
     EmotionsModule,
     ActivitiesModule,
     MoodsModule, 
     ChartsModule
   ],
-  controllers: [AppController],
+  controllers: [AppController,JobController],
   providers: [AppService],
 })
 export class AppModule {}
